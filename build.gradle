@@ -20,9 +20,26 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.5'
+
+	// DB
+	implementation 'com.mysql:mysql-connector-j:8.0.32'
+
+	// JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Utils
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+	// swagger
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.7'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
