@@ -14,4 +14,9 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public Location(String latitude, String longitude) {
+        this.latitude = Double.parseDouble(latitude);
+        this.longitude = Double.parseDouble(longitude);
+    }
 }
