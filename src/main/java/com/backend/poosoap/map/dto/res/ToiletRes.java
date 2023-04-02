@@ -1,8 +1,10 @@
 package com.backend.poosoap.map.dto.res;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class ToiletRes {
 
