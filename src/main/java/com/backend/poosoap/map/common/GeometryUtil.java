@@ -9,8 +9,7 @@ import com.backend.poosoap.map.dto.req.Location;
  */
 public class GeometryUtil {
 
-    public static Location calculate(Double baseLatitude, Double baseLongitude, Double distance,
-                                     Double bearing) {
+    public static Location calculate(Double baseLatitude, Double baseLongitude, Double distance, Double bearing) {
         Double radianLatitude = toRadian(baseLatitude);
         Double radianLongitude = toRadian(baseLongitude);
         Double radianAngle = toRadian(bearing);

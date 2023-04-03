@@ -37,9 +37,6 @@ class ToiletControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ToiletServiceImpl toiletService;
-
-    @Autowired
     private ToiletRepository toiletRepository;
 
     @BeforeEach
