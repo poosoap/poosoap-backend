@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ToiletReq {
+public class SaveToiletForm {
 
     private String addr;
 
     private Location location;
 
     @Builder
-    public ToiletReq(String addr, Location location) {
+    public SaveToiletForm(String addr, Location location) {
         this.addr = addr;
         this.location = location;
     }
