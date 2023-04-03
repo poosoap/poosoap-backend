@@ -1,10 +1,10 @@
 package com.backend.poosoap.map.controller;
 
 import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ToiletReq;
+import com.backend.poosoap.map.dto.req.ModifyToiletForm;
+import com.backend.poosoap.map.dto.req.SaveToiletForm;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.ToiletRepository;
-import com.backend.poosoap.map.service.impl.ToiletServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,7 +47,7 @@ class ToiletControllerTest {
     @DisplayName("화장실 등록 api 테스트")
     void createdToilet() throws Exception {
         //given
-        ToiletReq req = ToiletReq.builder()
+        SaveToiletForm req = SaveToiletForm.builder()
                 .addr("test")
                 .location(new Location(32.123, 127.123))
                 .build();
@@ -64,6 +63,41 @@ class ToiletControllerTest {
     }
 
     @Test
+    @DisplayName("화장실 수정 api 테스트")
+    void modifyToilet() throws Exception {
+        //given
+        Long id = initDataInput();
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .addr("테스트 수정 화장실")
+                .location(new Location("123.12", "321.21"))
+                .build();
+
+        String json = objectMapper.writeValueAsString(modifyToiletForm);
+
+        //expected
+        mockMvc.perform(patch("/api/v1/toilet")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("화장실 삭제 api 테스트")
+    void deleteToilet() throws Exception {
+        //given
+        Long id = initDataInput();
+
+        //expected
+        mockMvc.perform(delete("/api/v1/toilet/{toiletId}", id)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("1km 내에 있는 화장실 찾기")
     void findByToiletWithInOne() throws Exception {
         //given
@@ -74,6 +108,24 @@ class ToiletControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    private Long initDataInput() {
+        String pointWKT = String.format("POINT(%s %s)", 123.123, 234.234);
+
+        Point point = null;
+        try {
+            point = (Point) new WKTReader().read(pointWKT);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        Toilet toilet = Toilet.builder()
+                .addr("test")
+                .point(point)
+                .build();
+
+        return toiletRepository.save(toilet).getId();
     }
 
     private void saveSampleData() {

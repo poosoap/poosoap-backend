@@ -2,7 +2,8 @@ package com.backend.poosoap.map.service.impl;
 
 import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ToiletReq;
+import com.backend.poosoap.map.dto.req.ModifyToiletForm;
+import com.backend.poosoap.map.dto.req.SaveToiletForm;
 import com.backend.poosoap.map.dto.res.ToiletsRes;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.impl.ToiletRepositoryCustomImpl;
@@ -37,14 +38,14 @@ class ToiletServiceImplTest {
 
     @BeforeEach
     void cleanUp() {
-//        toiletRepository.deleteAll();
+        toiletRepository.deleteAll();
     }
 
     @Test
     @DisplayName("화장실 저장 테스트")
     void saveToilet() {
         //given
-        ToiletReq req = ToiletReq.builder()
+        SaveToiletForm req = SaveToiletForm.builder()
                 .addr("test")
                 .location(new Location(32.123, 127.123))
                 .build();
@@ -72,6 +73,59 @@ class ToiletServiceImplTest {
         //then
         assertEquals(2, byToilet.getSize());
         assertEquals("서울 관악구 조원로 142", byToilet.getToilets().get(0).getAddr());
+    }
+
+    @Test
+    @DisplayName("화장실 수정 테스트")
+    void modifyToilet() {
+        //given
+        Long id = initDataInput();
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .addr("테스트 수정 화장실")
+                .location(new Location("123.12", "321.21"))
+                .build();
+
+        //when
+        Long toiletId = toiletService.modifyToilet(modifyToiletForm);
+
+        Toilet saveToilet = toiletRepository.findById(toiletId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ERROR));
+
+        //then
+        assertEquals("테스트 수정 화장실", saveToilet.getAddr());
+    }
+
+    @Test
+    @DisplayName("화장실 삭제 테스트")
+    void deleteToilet() {
+        //given
+        Long id = initDataInput();
+
+        //when
+        Long toiletId = toiletService.deleteToilet(id);
+
+        //then
+        assertEquals(0, toiletRepository.count());
+    }
+
+    private Long initDataInput() {
+        String pointWKT = String.format("POINT(%s %s)", 123.123, 234.234);
+
+        Point point = null;
+        try {
+            point = (Point) new WKTReader().read(pointWKT);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        Toilet toilet = Toilet.builder()
+                .addr("test")
+                .point(point)
+                .build();
+
+        return toiletRepository.save(toilet).getId();
     }
 
     private void saveSampleData() {
