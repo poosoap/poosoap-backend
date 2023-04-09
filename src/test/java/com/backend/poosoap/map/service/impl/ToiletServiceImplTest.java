@@ -65,7 +65,7 @@ class ToiletServiceImplTest {
     void findByToiletWithInOne() {
         //given
         saveSampleData();
-        Location location = new Location(37.483145, 126.918987);
+        Location location = new Location(1.0, 37.483145, 126.918987);
 
         //when
         ToiletsRes byToilet = toiletService.findByToilet(location);

@@ -28,11 +28,12 @@ public class ToiletController {
         );
     }
 
-    @GetMapping("/{latitude}/{longitude}")
+    @GetMapping("/{radius}/{latitude}/{longitude}")
     @Operation(summary = "화장실 찾기", description = "반경 1km 화장실을 찾는 api")
-    public ApiResult<ToiletsRes> findByToiletInOneDistance(@PathVariable String latitude, @PathVariable String longitude) {
+    public ApiResult<ToiletsRes> findByToiletInOneDistance(
+            @PathVariable String radius, @PathVariable String latitude, @PathVariable String longitude) {
         return success(
-                toiletService.findByToilet(new Location(latitude, longitude))
+                toiletService.findByToilet(new Location(radius, latitude, longitude))
         );
     }
 
