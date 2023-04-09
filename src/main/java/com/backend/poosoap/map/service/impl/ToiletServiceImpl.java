@@ -54,13 +54,10 @@ public class ToiletServiceImpl implements ToiletService {
     @Override
     public ToiletsRes findByToilet(Location location) {
 
-        //distance km 단위
-        Double distance = 1.0;
-
         Location northEast = GeometryUtil
-                .calculate(location.getLatitude(), location.getLongitude(), distance, Direction.NORTHEAST.getBearing());
+                .calculate(location.getLatitude(), location.getLongitude(), location.getRadius(), Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil
-                .calculate(location.getLatitude(), location.getLongitude(), distance, Direction.SOUTHWEST.getBearing());
+                .calculate(location.getLatitude(), location.getLongitude(), location.getRadius(), Direction.SOUTHWEST.getBearing());
 
         double x1 = northEast.getLatitude();
         double y1 = northEast.getLongitude();
