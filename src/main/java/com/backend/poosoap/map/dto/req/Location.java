@@ -1,6 +1,6 @@
 package com.backend.poosoap.map.dto.req;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Location {
 
-    @NotBlank(message = "반경 값은 필수 입니다.")
+    @NotNull(message = "반경 값은 필수 입니다.")
     private Double radius;
 
-    @NotBlank(message = "위도값은 필수 입니다.")
+    @NotNull(message = "위도값은 필수 입니다.")
     private Double latitude;
 
-    @NotBlank(message = "경도값은 필수 입니다.")
+    @NotNull(message = "경도값은 필수 입니다.")
     private Double longitude;
 
     public Location(Double radius, Double latitude, Double longitude) {

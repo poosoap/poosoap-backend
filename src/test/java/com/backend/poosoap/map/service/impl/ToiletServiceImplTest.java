@@ -98,6 +98,24 @@ class ToiletServiceImplTest {
     }
 
     @Test
+    @DisplayName("존재 하지 않는 화장실 정보 수정하는 테스트시 에러 발생")
+    void modifyToiletError() {
+        //given
+        Long id = 10L;
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .addr("테스트 수정 화장실")
+                .location(new Location("123.12", "321.21"))
+                .build();
+
+        // expected
+        assertThrows(NotFoundException.class, () -> {
+            toiletService.modifyToilet(modifyToiletForm);
+        });
+    }
+
+    @Test
     @DisplayName("화장실 삭제 테스트")
     void deleteToilet() {
         //given
@@ -108,6 +126,18 @@ class ToiletServiceImplTest {
 
         //then
         assertEquals(0, toiletRepository.count());
+    }
+
+    @Test
+    @DisplayName("존재 하지 않는 화장실 삭제 테스트시 에러발생")
+    void deleteToiletError() {
+        //given
+        Long id = 10L;
+
+        //expected
+        assertThrows(NotFoundException.class, () -> {
+            toiletService.deleteToilet(id);
+        });
     }
 
     private Long initDataInput() {
