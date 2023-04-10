@@ -85,6 +85,70 @@ class ToiletControllerTest {
     }
 
     @Test
+    @DisplayName("존재 하지 않는 화장실 수정 api 테스트")
+    void modifyToiletError() throws Exception {
+        //given
+        Long id = 10L;
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .addr("테스트 수정 화장실")
+                .location(new Location("123.12", "321.21"))
+                .build();
+
+        String json = objectMapper.writeValueAsString(modifyToiletForm);
+
+        //expected
+        mockMvc.perform(patch("/api/v1/toilet")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("화장실 수정시 필수 값(주소) 없을때 생기는 api 에러 테스트")
+    void modifyToiletAddrError() throws Exception {
+        //given
+        Long id = initDataInput();
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .location(new Location("123.12", "321.21"))
+                .build();
+
+        String json = objectMapper.writeValueAsString(modifyToiletForm);
+
+        //expected
+        mockMvc.perform(patch("/api/v1/toilet")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("화장실 수정시 필수 값(위치) 없을때 생기는 api 에러 테스트")
+    void modifyToiletLocationError() throws Exception {
+        //given
+        Long id = initDataInput();
+
+        ModifyToiletForm modifyToiletForm = ModifyToiletForm.builder()
+                .id(id)
+                .addr("test addr")
+                .build();
+
+        String json = objectMapper.writeValueAsString(modifyToiletForm);
+
+        //expected
+        mockMvc.perform(patch("/api/v1/toilet")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("화장실 삭제 api 테스트")
     void deleteToilet() throws Exception {
         //given
@@ -94,6 +158,19 @@ class ToiletControllerTest {
         mockMvc.perform(delete("/api/v1/toilet/{toiletId}", id)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 화장실 삭제 api 테스트")
+    void deleteToiletError() throws Exception {
+        //given
+        Long id = 10L;
+
+        //expected
+        mockMvc.perform(delete("/api/v1/toilet/{toiletId}", id)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
