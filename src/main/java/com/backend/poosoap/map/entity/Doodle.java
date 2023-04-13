@@ -1,9 +1,13 @@
 package com.backend.poosoap.map.entity;
 
+import com.backend.poosoap.map.dto.req.ModifyDoodlesForm;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Doodle {
 
@@ -25,4 +29,21 @@ public class Doodle {
     private int totalSympathyCount;
 
     private boolean isAnonymous;
+
+    @Builder
+    public Doodle(Long id, Toilet toilet, String content, String writer, int totalLikeCount, int totalSympathyCount, boolean isAnonymous) {
+        this.id = id;
+        this.toilet = toilet;
+        this.content = content;
+        this.writer = writer;
+        this.totalLikeCount = totalLikeCount;
+        this.totalSympathyCount = totalSympathyCount;
+        this.isAnonymous = isAnonymous;
+    }
+
+    public void modify(ModifyDoodlesForm modifyDoodlesForm) {
+        this.content = modifyDoodlesForm.getContent();
+        this.writer = modifyDoodlesForm.getWriter();
+        this.isAnonymous = modifyDoodlesForm.isAnonymous();
+    }
 }
