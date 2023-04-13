@@ -9,7 +9,9 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +21,9 @@ public class Toilet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "toilet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Doodle> doodles;
 
     private String addr;
 
@@ -33,6 +38,7 @@ public class Toilet {
     @Builder
     public Toilet(Long id, String addr, Point point, Date startTime, Date endTime) {
         this.id = id;
+        this.doodles = new ArrayList<>();
         this.addr = addr;
         this.point = point;
         this.startTime = startTime;
