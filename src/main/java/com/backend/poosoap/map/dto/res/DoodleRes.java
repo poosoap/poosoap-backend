@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoodleRes {
 
-    private Long id;
-
     private int doodlesCount;
 
     private Double latitude;
@@ -17,8 +15,7 @@ public class DoodleRes {
     private Double longitude;
 
     @Builder
-    public DoodleRes(Long id, int doodlesCount, Double latitude, Double longitude) {
-        this.id = id;
+    public DoodleRes(int doodlesCount, Double latitude, Double longitude) {
         this.doodlesCount = doodlesCount;
         this.latitude = latitude;
         this.longitude = longitude;
