@@ -1,7 +1,7 @@
 package com.backend.poosoap.map.service;
 
 import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ModifyDoodlesForm;
+import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
 
@@ -14,7 +14,7 @@ public interface DoodleService {
     DoodlesRes findByDoodles(Location location);
 
     // 낙서장 수정
-    Long modifyDoodles(ModifyDoodlesForm modifyDoodlesForm);
+    Long modifyDoodles(ModifyDoodleForm modifyDoodleForm);
 
     // 낙서장 삭제
     Long deleteDoodles(Long id);

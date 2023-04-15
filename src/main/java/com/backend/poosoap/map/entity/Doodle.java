@@ -1,6 +1,6 @@
 package com.backend.poosoap.map.entity;
 
-import com.backend.poosoap.map.dto.req.ModifyDoodlesForm;
+import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,9 +41,9 @@ public class Doodle {
         this.isAnonymous = isAnonymous;
     }
 
-    public void modify(ModifyDoodlesForm modifyDoodlesForm) {
-        this.content = modifyDoodlesForm.getContent();
-        this.writer = modifyDoodlesForm.getWriter();
-        this.isAnonymous = modifyDoodlesForm.isAnonymous();
+    public void modify(ModifyDoodleForm modifyDoodleForm) {
+        this.content = modifyDoodleForm.getContent();
+        this.writer = modifyDoodleForm.getWriter();
+        this.isAnonymous = modifyDoodleForm.isAnonymous();
     }
 }
