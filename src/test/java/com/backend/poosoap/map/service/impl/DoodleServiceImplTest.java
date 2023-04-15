@@ -3,12 +3,10 @@ package com.backend.poosoap.map.service.impl;
 import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.dto.req.*;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
-import com.backend.poosoap.map.dto.res.ToiletsRes;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
 import com.backend.poosoap.map.repository.ToiletRepository;
-import com.backend.poosoap.map.repository.impl.ToiletRepositoryCustomImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,14 +97,14 @@ class DoodleServiceImplTest {
                 .build();
         Doodle saveDoodle = doodleRepository.save(doodle);
 
-        ModifyDoodlesForm modifyDoodlesForm = ModifyDoodlesForm.builder()
+        ModifyDoodleForm modifyDoodleForm = ModifyDoodleForm.builder()
                 .id(saveDoodle.getId())
                 .writer("kim")
                 .content("modify")
                 .build();
 
         //when
-        Long doodleId = doodleService.modifyDoodles(modifyDoodlesForm);
+        Long doodleId = doodleService.modifyDoodles(modifyDoodleForm);
 
         Doodle modifyDoodle = doodleRepository.findById(doodleId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_ERROR));
@@ -120,7 +118,7 @@ class DoodleServiceImplTest {
     @DisplayName("존재 하지 않는 낙서장 수정시 에러 발생")
     void modifyDoodleError() {
         //given
-        ModifyDoodlesForm modifyDoodlesForm = ModifyDoodlesForm.builder()
+        ModifyDoodleForm modifyDoodleForm = ModifyDoodleForm.builder()
                 .id(1L)
                 .writer("kim")
                 .content("modify")
@@ -128,7 +126,7 @@ class DoodleServiceImplTest {
 
         // expected
         assertThrows(NotFoundException.class, () -> {
-            doodleService.modifyDoodles(modifyDoodlesForm);
+            doodleService.modifyDoodles(modifyDoodleForm);
         });
     }
 
