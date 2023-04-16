@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -30,6 +32,12 @@ public class Doodle {
 
     private boolean isAnonymous;
 
+    @Temporal(TemporalType.DATE)
+    private Date regDate;
+
+    @Temporal(TemporalType.DATE)
+    private Date modifyDate;
+
     @Builder
     public Doodle(Long id, Toilet toilet, String content, String writer, int totalLikeCount, int totalSympathyCount, boolean isAnonymous) {
         this.id = id;
@@ -39,11 +47,13 @@ public class Doodle {
         this.totalLikeCount = totalLikeCount;
         this.totalSympathyCount = totalSympathyCount;
         this.isAnonymous = isAnonymous;
+        this.regDate = new Date();
     }
 
     public void modify(ModifyDoodleForm modifyDoodleForm) {
         this.content = modifyDoodleForm.getContent();
         this.writer = modifyDoodleForm.getWriter();
         this.isAnonymous = modifyDoodleForm.isAnonymous();
+        this.modifyDate = new Date();
     }
 }
