@@ -2,7 +2,7 @@ package com.backend.poosoap.map.controller;
 
 import com.backend.poosoap.common.utils.ApiUtils.ApiResult;
 import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ModifyDoodlesForm;
+import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
 import com.backend.poosoap.map.service.DoodleService;
@@ -39,9 +39,9 @@ public class DoodleController {
 
     @PatchMapping
     @Operation(summary = "낙서장 수정", description = "낙서장을 수정하는 api")
-    public ApiResult<Long> modifyDoodle(@RequestBody @Valid ModifyDoodlesForm modifyToiletForm) {
+    public ApiResult<Long> modifyDoodle(@RequestBody @Valid ModifyDoodleForm modifyDoodleForm) {
         return success(
-                doodleService.modifyDoodles(modifyToiletForm)
+                doodleService.modifyDoodles(modifyDoodleForm)
         );
     }
 

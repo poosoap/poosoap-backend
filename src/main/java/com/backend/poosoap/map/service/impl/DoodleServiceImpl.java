@@ -4,7 +4,7 @@ import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.common.GeometryUtil;
 import com.backend.poosoap.map.dto.req.Direction;
 import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ModifyDoodlesForm;
+import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodleRes;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
@@ -81,12 +81,12 @@ public class DoodleServiceImpl implements DoodleService {
     }
 
     @Override
-    public Long modifyDoodles(ModifyDoodlesForm modifyDoodlesForm) {
+    public Long modifyDoodles(ModifyDoodleForm modifyDoodleForm) {
 
-        Doodle doodle = doodleRepository.findById(modifyDoodlesForm.getId())
+        Doodle doodle = doodleRepository.findById(modifyDoodleForm.getId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_DOODLE_ERROR_MSG));
 
-        doodle.modify(modifyDoodlesForm);
+        doodle.modify(modifyDoodleForm);
 
         return doodleRepository.save(doodle).getId();
     }
