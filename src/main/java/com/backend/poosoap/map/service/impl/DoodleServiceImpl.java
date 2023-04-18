@@ -8,6 +8,8 @@ import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodleRes;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.res.FindDoodle;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -78,6 +80,27 @@ public class DoodleServiceImpl implements DoodleService {
         }
 
         return new DoodlesRes(doodles);
+    }
+
+    @Override
+    public FindDoodles findByDoodle(Long toiletId) {
+
+        Toilet toilet = toiletRepository.findById(toiletId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_TOILET_ERROR_MSG));
+
+        List<Doodle> doodles = doodleRepository.findByToilet(toilet);
+        List<FindDoodle> findDoodles = new ArrayList<>();
+        for (Doodle doodle : doodles) {
+
+            FindDoodle temp = FindDoodle.builder()
+                    .content(doodle.getContent())
+                    .writer(doodle.isAnonymous() ? "익명" : doodle.getWriter())
+                    .build();
+
+            findDoodles.add(temp);
+        }
+
+        return new FindDoodles(findDoodles);
     }
 
     @Override

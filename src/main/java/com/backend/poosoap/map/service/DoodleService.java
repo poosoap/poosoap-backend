@@ -4,6 +4,7 @@ import com.backend.poosoap.map.dto.req.Location;
 import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 
 public interface DoodleService {
 
@@ -12,6 +13,8 @@ public interface DoodleService {
 
     // 낙서장 찾기
     DoodlesRes findByDoodles(Location location);
+
+    FindDoodles findByDoodle(Long toiletId);
 
     // 낙서장 수정
     Long modifyDoodles(ModifyDoodleForm modifyDoodleForm);

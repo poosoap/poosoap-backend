@@ -5,6 +5,7 @@ import com.backend.poosoap.map.dto.req.Location;
 import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 import com.backend.poosoap.map.service.DoodleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -28,8 +29,16 @@ public class DoodleController {
         );
     }
 
+    @GetMapping("/{toiletId}")
+    @Operation(summary = "낙서장 글 상세보기", description = "반경 1km 낙서장을 찾는 api")
+    public ApiResult<FindDoodles> findByDoodle(@PathVariable Long toiletId) {
+        return success(
+                doodleService.findByDoodle(toiletId)
+        );
+    }
+
     @GetMapping("/{radius}/{latitude}/{longitude}")
-    @Operation(summary = "낙서장 찾기", description = "반경 1km 낙서장을 찾는 api")
+    @Operation(summary = "화장실에 낙서글이 얼마나 있는지 찾기", description = "반경 1km 낙서장을 찾는 api")
     public ApiResult<DoodlesRes> findByDoodleInOneDistance(
             @PathVariable String radius, @PathVariable String latitude, @PathVariable String longitude) {
         return success(
