@@ -1,6 +1,7 @@
 package com.backend.poosoap.map.controller;
 
 import com.backend.poosoap.map.dto.req.*;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -175,6 +177,19 @@ class DoodleControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("화장실에 있는 낙서글 상세 보기")
+    void findByToiletDoodles() throws Exception {
+        //given
+        saveSampleData();
+
+        //expected
+        mockMvc.perform(get("/api/v1/toilet/doodle/{toiletId}", toilet.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
     private void saveToilet() {
         // WKTReader를 통해 WKT를 실제 타입으로 변환합니다.
         String pointWKT = String.format("POINT(%s %s)", "37.485762", "126.918146");
@@ -206,12 +221,12 @@ class DoodleControllerTest {
             throw new RuntimeException(e);
         }
 
-        Toilet toilet1 = Toilet.builder()
+        toilet = Toilet.builder()
                 .addr("서울 관악구 조원로 142")
                 .point(point)
                 .build();
 
-        toilets.add(toilet1);
+        toilets.add(toilet);
 
         // WKTReader를 통해 WKT를 실제 타입으로 변환합니다.
         pointWKT = String.format("POINT(%s %s)", "37.482768", "126.915493");
@@ -235,7 +250,7 @@ class DoodleControllerTest {
         List<Doodle> doodles = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Doodle doodle1 = Doodle.builder()
-                    .toilet(toilet1)
+                    .toilet(toilet)
                     .writer("writer1" + i)
                     .content("test1" + i)
                     .isAnonymous(true)

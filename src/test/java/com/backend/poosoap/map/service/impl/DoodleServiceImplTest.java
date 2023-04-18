@@ -3,6 +3,7 @@ package com.backend.poosoap.map.service.impl;
 import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.dto.req.*;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -81,6 +82,21 @@ class DoodleServiceImplTest {
         assertEquals(2, doodles.getSize());
         assertEquals(37.485762, doodles.getDoodles().get(0).getLatitude());
         assertEquals(126.918146, doodles.getDoodles().get(0).getLongitude());
+    }
+
+    @Test
+    @DisplayName("화장실에 있는 낙서글 상세 보기")
+    void findByToiletDoodles() {
+        //given
+        saveSampleData();
+
+        //when
+        FindDoodles findDoodles = doodleService.findByDoodle(toilet.getId());
+
+        //then
+        assertEquals(5, findDoodles.getSize());
+        assertEquals("test10", findDoodles.getFindDoodles().get(0).getContent());
+        assertEquals("익명", findDoodles.getFindDoodles().get(0).getWriter());
     }
 
     @Test
@@ -194,12 +210,12 @@ class DoodleServiceImplTest {
             throw new RuntimeException(e);
         }
 
-        Toilet toilet1 = Toilet.builder()
+        toilet = Toilet.builder()
                 .addr("서울 관악구 조원로 142")
                 .point(point)
                 .build();
 
-        toilets.add(toilet1);
+        toilets.add(toilet);
 
         // WKTReader를 통해 WKT를 실제 타입으로 변환합니다.
         pointWKT = String.format("POINT(%s %s)", "37.482768", "126.915493");
@@ -223,7 +239,7 @@ class DoodleServiceImplTest {
         List<Doodle> doodles = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Doodle doodle1 = Doodle.builder()
-                    .toilet(toilet1)
+                    .toilet(toilet)
                     .writer("writer1" + i)
                     .content("test1" + i)
                     .isAnonymous(true)
