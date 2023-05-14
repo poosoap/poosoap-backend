@@ -1,6 +1,7 @@
 package com.backend.poosoap.map.controller;
 
 import com.backend.poosoap.map.dto.req.*;
+import com.backend.poosoap.map.dto.res.FindDoodles;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -166,7 +168,23 @@ class DoodleControllerTest {
         saveSampleData();
 
         //expected
-        mockMvc.perform(get("/api/v1/toilet/doodle/{radius}/{latitude}/{longitude}", 1.0, "37.483145", "126.918987")
+        mockMvc.perform(get("/api/v1/toilet/doodle")
+                        .param("radius", "1.0")
+                        .param("latitude", "37.483145")
+                        .param("longitude", "126.918987")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("화장실에 있는 낙서글 상세 보기")
+    void findByToiletDoodles() throws Exception {
+        //given
+        saveSampleData();
+
+        //expected
+        mockMvc.perform(get("/api/v1/toilet/doodle/{toiletId}", toilet.getId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -203,12 +221,12 @@ class DoodleControllerTest {
             throw new RuntimeException(e);
         }
 
-        Toilet toilet1 = Toilet.builder()
+        toilet = Toilet.builder()
                 .addr("서울 관악구 조원로 142")
                 .point(point)
                 .build();
 
-        toilets.add(toilet1);
+        toilets.add(toilet);
 
         // WKTReader를 통해 WKT를 실제 타입으로 변환합니다.
         pointWKT = String.format("POINT(%s %s)", "37.482768", "126.915493");
@@ -232,7 +250,7 @@ class DoodleControllerTest {
         List<Doodle> doodles = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Doodle doodle1 = Doodle.builder()
-                    .toilet(toilet1)
+                    .toilet(toilet)
                     .writer("writer1" + i)
                     .content("test1" + i)
                     .isAnonymous(true)
@@ -249,6 +267,36 @@ class DoodleControllerTest {
             doodles.add(doodle2);
         }
         doodleRepository.saveAll(doodles);
+    }
+
+    @Test
+    @DisplayName("낙서장 공감 등록 api 테스트")
+    void updateLikeLove() throws Exception {
+        //given
+        saveToilet();
+
+        Doodle doodle = Doodle.builder()
+                .toilet(toilet)
+                .content("test")
+                .writer("lee")
+                .isAnonymous(true)
+                .build();
+        Doodle saveDoodle = doodleRepository.save(doodle);
+
+        ReactionForm form = ReactionForm.builder()
+                .doodleId(saveDoodle.getId())
+                .userId("test")
+                .reactionType(ReactionType.LOVE)
+                .build();
+
+        String json = objectMapper.writeValueAsString(form);
+
+        //expected
+        mockMvc.perform(post("/api/v1/toilet/doodle/reactions")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }

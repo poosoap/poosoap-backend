@@ -3,8 +3,11 @@ package com.backend.poosoap.map.controller;
 import com.backend.poosoap.common.utils.ApiUtils.ApiResult;
 import com.backend.poosoap.map.dto.req.Location;
 import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
+import com.backend.poosoap.map.dto.req.ReactionForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.res.FindDoodles;
+import com.backend.poosoap.map.dto.res.ReactionRes;
 import com.backend.poosoap.map.service.DoodleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -28,10 +31,20 @@ public class DoodleController {
         );
     }
 
-    @GetMapping("/{radius}/{latitude}/{longitude}")
-    @Operation(summary = "낙서장 찾기", description = "반경 1km 낙서장을 찾는 api")
+    @GetMapping("/{toiletId}")
+    @Operation(summary = "낙서장 글 상세보기", description = "반경 1km 낙서장을 찾는 api")
+    public ApiResult<FindDoodles> findByDoodle(@PathVariable Long toiletId) {
+        return success(
+                doodleService.findByDoodle(toiletId)
+        );
+    }
+
+    @GetMapping
+    @Operation(summary = "화장실에 낙서글이 얼마나 있는지 찾기", description = "반경 1km 낙서장을 찾는 api")
     public ApiResult<DoodlesRes> findByDoodleInOneDistance(
-            @PathVariable String radius, @PathVariable String latitude, @PathVariable String longitude) {
+            @RequestParam("radius") String radius,
+            @RequestParam("latitude") String latitude,
+            @RequestParam("longitude") String longitude) {
         return success(
                 doodleService.findByDoodles(new Location(radius, latitude, longitude))
         );
@@ -50,6 +63,14 @@ public class DoodleController {
     public ApiResult<Long> deleteDoodle(@PathVariable Long doodleId) {
         return success(
                 doodleService.deleteDoodles(doodleId)
+        );
+    }
+
+    @PostMapping("/reactions")
+    @Operation(summary = "낙서장 좋아요, 공감 기능", description = "낙서장 좋아요, 공감 등록하는 api")
+    public ApiResult<ReactionRes> updateLikeLove(@RequestBody ReactionForm req) {
+        return success(
+                doodleService.likeLoveCount(req)
         );
     }
 }

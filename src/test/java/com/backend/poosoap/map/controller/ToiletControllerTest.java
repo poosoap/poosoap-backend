@@ -181,7 +181,10 @@ class ToiletControllerTest {
         saveSampleData();
 
         //expected
-        mockMvc.perform(get("/api/v1/toilet/{radius}/{latitude}/{longitude}", 1.0, "37.483145", "126.918987")
+        mockMvc.perform(get("/api/v1/toilet")
+                        .param("radius", "1.0")
+                        .param("latitude", "37.483145")
+                        .param("longitude", "126.918987")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());

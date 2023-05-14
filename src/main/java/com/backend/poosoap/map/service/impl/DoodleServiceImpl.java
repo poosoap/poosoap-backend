@@ -2,14 +2,12 @@ package com.backend.poosoap.map.service.impl;
 
 import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.common.GeometryUtil;
-import com.backend.poosoap.map.dto.req.Direction;
-import com.backend.poosoap.map.dto.req.Location;
-import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
-import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
-import com.backend.poosoap.map.dto.res.DoodleRes;
-import com.backend.poosoap.map.dto.res.DoodlesRes;
+import com.backend.poosoap.map.dto.req.*;
+import com.backend.poosoap.map.dto.res.*;
 import com.backend.poosoap.map.entity.Doodle;
+import com.backend.poosoap.map.entity.DoodleReactions;
 import com.backend.poosoap.map.entity.Toilet;
+import com.backend.poosoap.map.repository.DoodleReactionsRepository;
 import com.backend.poosoap.map.repository.DoodleRepository;
 import com.backend.poosoap.map.repository.ToiletRepository;
 import com.backend.poosoap.map.repository.ToiletRepositoryCustom;
@@ -33,6 +31,8 @@ public class DoodleServiceImpl implements DoodleService {
     private final ToiletRepositoryCustom gymLocationRepository;
 
     private final DoodleRepository doodleRepository;
+
+    private final DoodleReactionsRepository doodleReactionsRepository;
 
     @Override
     public Long saveDoodles(SaveDoodlesForm saveDoodlesForm) {
@@ -81,6 +81,27 @@ public class DoodleServiceImpl implements DoodleService {
     }
 
     @Override
+    public FindDoodles findByDoodle(Long toiletId) {
+
+        Toilet toilet = toiletRepository.findById(toiletId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_TOILET_ERROR_MSG));
+
+        List<Doodle> doodles = doodleRepository.findByToilet(toilet);
+        List<FindDoodle> findDoodles = new ArrayList<>();
+        for (Doodle doodle : doodles) {
+
+            FindDoodle temp = FindDoodle.builder()
+                    .content(doodle.getContent())
+                    .writer(doodle.isAnonymous() ? "익명" : doodle.getWriter())
+                    .build();
+
+            findDoodles.add(temp);
+        }
+
+        return new FindDoodles(findDoodles);
+    }
+
+    @Override
     public Long modifyDoodles(ModifyDoodleForm modifyDoodleForm) {
 
         Doodle doodle = doodleRepository.findById(modifyDoodleForm.getId())
@@ -100,5 +121,41 @@ public class DoodleServiceImpl implements DoodleService {
         doodleRepository.delete(doodle);
 
         return id;
+    }
+
+    @Override
+    public ReactionRes likeLoveCount(ReactionForm reactionForm) {
+
+        // 테이블 저장 - 존재 하는 낙서장인지 검증
+        Doodle doodle = doodleRepository.findById(reactionForm.getDoodleId())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_DOODLE_ERROR_MSG));
+
+        // 유저 기능이 추가된다면 유저 검증도 필요
+
+        DoodleReactions.DoodleReactionsBuilder builder = DoodleReactions.builder()
+                .doodle(doodle)
+                .userId(reactionForm.getUserId());
+
+        // 전체 카운트 증가 또는 감소
+
+        if (reactionForm.getReactionType() == ReactionType.LIKE || reactionForm.getReactionType() == ReactionType.UNLIKE) {
+            builder.likeCount(reactionForm.getReactionType().getValue());
+            doodle.updateLikeCount(reactionForm.getReactionType());
+        } else if (reactionForm.getReactionType() == ReactionType.LOVE || reactionForm.getReactionType() == ReactionType.HATE) {
+            builder.sympathy_count(reactionForm.getReactionType().getValue());
+            doodle.updateLoveCount(reactionForm.getReactionType());
+        }
+
+        doodleRepository.save(doodle);
+
+        DoodleReactions doodleReactions = builder.build();
+        DoodleReactions saveDoodleReactions = doodleReactionsRepository.save(doodleReactions);
+
+        return ReactionRes.builder()
+                .doodleId(doodle.getId())
+                .userId(reactionForm.getUserId())
+                .loveCount(doodle.getTotalLoveCount())
+                .likeCount(doodle.getTotalLikeCount())
+                .build();
     }
 }
