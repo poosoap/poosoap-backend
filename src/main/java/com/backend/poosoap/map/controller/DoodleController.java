@@ -3,9 +3,11 @@ package com.backend.poosoap.map.controller;
 import com.backend.poosoap.common.utils.ApiUtils.ApiResult;
 import com.backend.poosoap.map.dto.req.Location;
 import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
+import com.backend.poosoap.map.dto.req.ReactionForm;
 import com.backend.poosoap.map.dto.req.SaveDoodlesForm;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
 import com.backend.poosoap.map.dto.res.FindDoodles;
+import com.backend.poosoap.map.dto.res.ReactionRes;
 import com.backend.poosoap.map.service.DoodleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -61,6 +63,14 @@ public class DoodleController {
     public ApiResult<Long> deleteDoodle(@PathVariable Long doodleId) {
         return success(
                 doodleService.deleteDoodles(doodleId)
+        );
+    }
+
+    @PostMapping("/reactions")
+    @Operation(summary = "낙서장 좋아요, 공감 기능", description = "낙서장 좋아요, 공감 등록하는 api")
+    public ApiResult<ReactionRes> updateLikeLove(@RequestBody ReactionForm req) {
+        return success(
+                doodleService.likeLoveCount(req)
         );
     }
 }
