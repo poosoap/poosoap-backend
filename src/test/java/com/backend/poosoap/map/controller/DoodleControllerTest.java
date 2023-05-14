@@ -269,4 +269,34 @@ class DoodleControllerTest {
         doodleRepository.saveAll(doodles);
     }
 
+    @Test
+    @DisplayName("낙서장 공감 등록 api 테스트")
+    void updateLikeLove() throws Exception {
+        //given
+        saveToilet();
+
+        Doodle doodle = Doodle.builder()
+                .toilet(toilet)
+                .content("test")
+                .writer("lee")
+                .isAnonymous(true)
+                .build();
+        Doodle saveDoodle = doodleRepository.save(doodle);
+
+        ReactionForm form = ReactionForm.builder()
+                .doodleId(saveDoodle.getId())
+                .userId("test")
+                .reactionType(ReactionType.LOVE)
+                .build();
+
+        String json = objectMapper.writeValueAsString(form);
+
+        //expected
+        mockMvc.perform(post("/api/v1/toilet/doodle/reactions")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
 }

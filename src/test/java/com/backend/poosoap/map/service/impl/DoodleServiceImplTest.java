@@ -4,6 +4,7 @@ import com.backend.poosoap.common.exception.NotFoundException;
 import com.backend.poosoap.map.dto.req.*;
 import com.backend.poosoap.map.dto.res.DoodlesRes;
 import com.backend.poosoap.map.dto.res.FindDoodles;
+import com.backend.poosoap.map.dto.res.ReactionRes;
 import com.backend.poosoap.map.entity.Doodle;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -256,6 +257,64 @@ class DoodleServiceImplTest {
             doodles.add(doodle2);
         }
         doodleRepository.saveAll(doodles);
+    }
+
+    @Test
+    @DisplayName("화장실에 있는 낙서글 좋아요 테스트")
+    void updateLikeCount() {
+        //given
+        saveToilet();
+
+        Doodle doodle = Doodle.builder()
+                .toilet(toilet)
+                .content("test")
+                .writer("lee")
+                .isAnonymous(true)
+                .build();
+        Doodle saveDoodle = doodleRepository.save(doodle);
+
+        ReactionForm form = ReactionForm.builder()
+                .doodleId(doodle.getId())
+                .userId("test")
+                .reactionType(ReactionType.LIKE)
+                .build();
+
+        //when
+        ReactionRes reactionRes = doodleService.likeLoveCount(form);
+
+        //then
+        assertEquals(1, reactionRes.getLikeCount());
+        assertEquals(0, reactionRes.getLoveCount());
+        assertEquals(doodle.getId(), reactionRes.getDoodleId());
+    }
+
+    @Test
+    @DisplayName("화장실에 있는 낙서글 공감해요 테스트")
+    void updateLoveCount() {
+        //given
+        saveToilet();
+
+        Doodle doodle = Doodle.builder()
+                .toilet(toilet)
+                .content("test")
+                .writer("lee")
+                .isAnonymous(true)
+                .build();
+        Doodle saveDoodle = doodleRepository.save(doodle);
+
+        ReactionForm form = ReactionForm.builder()
+                .doodleId(doodle.getId())
+                .userId("test")
+                .reactionType(ReactionType.LOVE)
+                .build();
+
+        //when
+        ReactionRes reactionRes = doodleService.likeLoveCount(form);
+
+        //then
+        assertEquals(0, reactionRes.getLikeCount());
+        assertEquals(1, reactionRes.getLoveCount());
+        assertEquals(doodle.getId(), reactionRes.getDoodleId());
     }
 
 }
