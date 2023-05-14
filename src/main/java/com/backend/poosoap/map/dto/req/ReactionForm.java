@@ -3,6 +3,7 @@ package com.backend.poosoap.map.dto.req;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,11 @@ public class ReactionForm {
 
     @Enumerated(EnumType.STRING)
     private ReactionType reactionType;
+
+    @Builder
+    public ReactionForm(Long doodleId, String userId, ReactionType reactionType) {
+        this.doodleId = doodleId;
+        this.userId = userId;
+        this.reactionType = reactionType;
+    }
 }

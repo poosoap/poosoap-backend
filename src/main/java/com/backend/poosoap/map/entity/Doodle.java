@@ -1,6 +1,7 @@
 package com.backend.poosoap.map.entity;
 
 import com.backend.poosoap.map.dto.req.ModifyDoodleForm;
+import com.backend.poosoap.map.dto.req.ReactionType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,5 +60,21 @@ public class Doodle {
         this.writer = modifyDoodleForm.getWriter();
         this.isAnonymous = modifyDoodleForm.isAnonymous();
         this.modifyDate = new Date();
+    }
+
+    public void updateLikeCount(ReactionType reactionType) {
+        if (reactionType.getValue() > 0) {
+            this.totalLikeCount += reactionType.getValue();
+        } else {
+            this.totalLikeCount -= reactionType.getValue();
+        }
+    }
+
+    public void updateLoveCount(ReactionType reactionType) {
+        if (reactionType.getValue() > 0) {
+            this.totalLoveCount += reactionType.getValue();
+        } else {
+            this.totalLoveCount -= reactionType.getValue();
+        }
     }
 }
