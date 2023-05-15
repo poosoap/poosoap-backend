@@ -44,10 +44,9 @@ public class ReviewController {
     public ApiResult<Page<ReviewRes>> findByReviewToToilet(
             @RequestParam("toiletId") Long toiletId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,desc") String sort) {
+            @RequestParam(defaultValue = "10") int size) {
 
-        Sort pageableSort = Sort.by(Sort.Direction.DESC, sort);
+        Sort pageableSort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, pageableSort);
 
         return success(
