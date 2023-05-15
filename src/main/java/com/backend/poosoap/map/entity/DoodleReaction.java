@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class DoodleReactions {
+public class DoodleReaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class DoodleReactions {
     private int sympathy_count;
 
     @Builder
-    public DoodleReactions(Long id, Doodle doodle, String userId, int likeCount, int sympathy_count) {
+    public DoodleReaction(Long id, Doodle doodle, String userId, int likeCount, int sympathy_count) {
         this.id = id;
         this.doodle = doodle;
         this.userId = userId;

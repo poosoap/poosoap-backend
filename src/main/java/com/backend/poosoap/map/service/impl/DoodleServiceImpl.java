@@ -5,7 +5,7 @@ import com.backend.poosoap.map.common.GeometryUtil;
 import com.backend.poosoap.map.dto.req.*;
 import com.backend.poosoap.map.dto.res.*;
 import com.backend.poosoap.map.entity.Doodle;
-import com.backend.poosoap.map.entity.DoodleReactions;
+import com.backend.poosoap.map.entity.DoodleReaction;
 import com.backend.poosoap.map.entity.Toilet;
 import com.backend.poosoap.map.repository.DoodleReactionsRepository;
 import com.backend.poosoap.map.repository.DoodleRepository;
@@ -132,7 +132,7 @@ public class DoodleServiceImpl implements DoodleService {
 
         // 유저 기능이 추가된다면 유저 검증도 필요
 
-        DoodleReactions.DoodleReactionsBuilder builder = DoodleReactions.builder()
+        DoodleReaction.DoodleReactionBuilder builder = DoodleReaction.builder()
                 .doodle(doodle)
                 .userId(reactionForm.getUserId());
 
@@ -148,8 +148,8 @@ public class DoodleServiceImpl implements DoodleService {
 
         doodleRepository.save(doodle);
 
-        DoodleReactions doodleReactions = builder.build();
-        DoodleReactions saveDoodleReactions = doodleReactionsRepository.save(doodleReactions);
+        DoodleReaction doodleReaction = builder.build();
+        DoodleReaction saveDoodleReaction = doodleReactionsRepository.save(doodleReaction);
 
         return ReactionRes.builder()
                 .doodleId(doodle.getId())

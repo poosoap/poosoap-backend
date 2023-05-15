@@ -25,6 +25,9 @@ public class Toilet {
     @OneToMany(mappedBy = "toilet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Doodle> doodles;
 
+    @OneToMany(mappedBy = "toilet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
+
     private String addr;
 
     private Point point;

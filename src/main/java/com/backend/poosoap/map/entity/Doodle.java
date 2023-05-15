@@ -23,7 +23,7 @@ public class Doodle {
     private Toilet toilet;
 
     @OneToMany(mappedBy = "doodle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<DoodleReactions> reactions;
+    private List<DoodleReaction> reactions;
 
     private String content;
 
