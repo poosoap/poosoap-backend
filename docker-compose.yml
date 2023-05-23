@@ -2,7 +2,7 @@ version: '3'
 services:
   backend:
     container_name: poosoap
-    image: apple4rhk/poosoap:latest
+    image: docker-poosoap:0.0.1
     ports:
       - '8080:8080' # local
     platform: linux/amd64
