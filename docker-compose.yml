@@ -29,5 +29,5 @@ services:
       - poosoap-net
 
 networks:
-  dami-net:
+  poosoap-net:
     driver: bridge
