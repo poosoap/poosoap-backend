@@ -1,0 +1,33 @@
+version: '3'
+services:
+  backend:
+    container_name: poosoap
+    image: apple4rhk/poosoap:latest
+    ports:
+      - '8080:8080' # local
+    platform: linux/amd64
+    restart: always
+    environment:
+      - USE_PROFILE=real
+    depends_on:
+      - mysql
+    networks:
+      - poosoap-net
+
+  mysql:
+    container_name: poosoap-mysql
+    image: mysql:8.0.30
+    ports:
+      - '3306:3306'
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=poosoapUser1!
+      - MYSQL_USER=poosoap-user
+      - MYSQL_PASSWORD=poosoapUser1!
+      - MYSQL_DATABASE=poosoap
+    networks:
+      - poosoap-net
+
+networks:
+  dami-net:
+    driver: bridge
