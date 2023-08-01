@@ -33,9 +33,6 @@ class ToiletServiceImplTest {
     @Autowired
     private ToiletRepository toiletRepository;
 
-    @Autowired
-    private ToiletRepositoryCustomImpl gymLocationRepository;
-
     @BeforeEach
     void cleanUp() {
         toiletRepository.deleteAll();
