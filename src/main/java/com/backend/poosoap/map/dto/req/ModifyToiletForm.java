@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyToiletForm {
 
-    @NotNull(message = "변경하려는 화장실 id 값은 필수 입니다.")
+    @NotNull(message = "변경 하려는 화장실 id 값은 필수 입니다.")
     private Long id;
 
-    @NotBlank(message = "변경하려는 화장실 주소 값은 필수 입니다.")
+    @NotBlank(message = "변경 하려는 화장실 주소 값은 필수 입니다.")
     private String addr;
 
-    @NotNull(message = "변경하려는 화장실 위치 값은 필수 입니다.")
+    @NotNull(message = "변경 하려는 화장실 위치 값은 필수 입니다.")
     private Location location;
 
     @Builder

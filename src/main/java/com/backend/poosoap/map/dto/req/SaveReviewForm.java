@@ -13,10 +13,10 @@ public class SaveReviewForm {
     @NotNull(message = "등록하려는 화장실 key 값은 필수 입니다.")
     private Long toiletId;
 
-    @NotBlank(message = "등록하려는 리뷰 내용은 필수 입니다.")
+    @NotBlank(message = "등록 하려는 리뷰 내용은 필수 입니다.")
     private String content;
 
-    @NotBlank(message = "리뷰를 등록하기 위해선 로그인을 해주세요.")
+    @NotBlank(message = "리뷰를 등록 하기 위해선 로그인을 해주세요.")
     private String writer;
 
     @NotNull(message = "평점은 필수 값 입니다.")

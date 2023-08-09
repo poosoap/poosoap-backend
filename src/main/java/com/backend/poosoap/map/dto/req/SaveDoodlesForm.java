@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SaveDoodlesForm {
 
-    @NotNull(message = "등록하려는 화장실 key 값은 필수 입니다.")
+    @NotNull(message = "등록 하려는 화장실 key 값은 필수 입니다.")
     private Long toiletId;
 
-    @NotBlank(message = "등록하려는 낙서 내용은 필수 입니다.")
+    @NotBlank(message = "등록 하려는 낙서 내용은 필수 입니다.")
     private String content;
 
     private String writer;

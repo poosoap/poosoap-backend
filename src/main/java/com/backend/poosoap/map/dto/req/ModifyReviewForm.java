@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyReviewForm {
 
-    @NotNull(message = "수정하려는 리뷰 key 값은 필수 입니다.")
+    @NotNull(message = "수정 하려는 리뷰 key 값은 필수 입니다.")
     @JsonProperty(index = 1)
     private Long Id;
 
-    @NotBlank(message = "수정하려는 리뷰 내용은 필수 입니다.")
+    @NotBlank(message = "수정 하려는 리뷰 내용은 필수 입니다.")
     private String content;
 
-    @NotBlank(message = "리뷰를 수정하기 위해선 로그인을 해주세요.")
+    @NotBlank(message = "리뷰를 수정 하기 위해선 로그인을 해주세요.")
     private String writer;
 
     @NotNull

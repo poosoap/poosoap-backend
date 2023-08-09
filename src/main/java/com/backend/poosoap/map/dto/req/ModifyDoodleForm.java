@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyDoodleForm {
 
-    @NotNull(message = "수정하려는 낙서장 key 값은 필수 입니다.")
+    @NotNull(message = "수정 하려는 낙서장 key 값은 필수 입니다.")
     @JsonProperty(index = 1)
     private Long Id;
 
-    @NotBlank(message = "등록하려는 낙서 내용은 필수 입니다.")
+    @NotBlank(message = "등록 하려는 낙서 내용은 필수 입니다.")
     private String content;
 
     private String writer;
